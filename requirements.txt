@@ -2,3 +2,5 @@ faker==25.9.1
 requests==2.32.3
 inquirer==3.4.0
 tqdm==4.66.4
+googletrans==4.0.0rc1
+aiohttp==3.10.5
