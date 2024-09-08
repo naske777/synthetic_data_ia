@@ -1,0 +1,32 @@
+import json
+from faker import Faker
+from tqdm import tqdm
+import random
+import os
+import tkinter as tk
+from tkinter import simpledialog
+
+fake = Faker()
+
+# Define the structure of the JSON data
+def generate_data(index):
+    return {}
+
+# Crear la carpeta 'output' si no existe
+if not os.path.exists('output'):
+    os.makedirs('output')
+
+# Configurar la interfaz gráfica para solicitar el nombre del archivo
+root = tk.Tk()
+root.withdraw()  # Ocultar la ventana principal
+file_name = simpledialog.askstring("Nombre del archivo", "Ingrese el nombre del archivo a generar (sin extensión):")
+if not file_name:
+    file_name = 'data'  # Nombre por defecto si no se proporciona uno
+
+# Generar objetos de datos
+data = [generate_data(i) for i in tqdm(range(300000))]
+
+# Guardar los datos generados en un archivo JSON en la carpeta 'output'
+file_path = os.path.join('output', f'{file_name}.json')
+with open(file_path, 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=4)
