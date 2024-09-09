@@ -5,7 +5,7 @@ import re
 import time
 import os
 from config import (MODEL_NAME, GENERATE_DATA_ROLE, 
-                    GENERATE_DATA_QUESTION_TEMPLATE, GENERATE_DATA_OPTIONS)  # Importar configuraciones
+                    GENERATE_DATA_QUESTION_TEMPLATE, GENERATE_DATA_OPTIONS, OLLAMA_URL)  # Importar configuraciones
 
 # Función asincrónica para imprimir el tiempo transcurrido cada 10 segundos
 async def print_elapsed_time(start_time):
@@ -38,7 +38,7 @@ async def generate_elements(format_string, num_elements):
         "options": GENERATE_DATA_OPTIONS  # Usar el objeto OPTIONS completo
     }
     
-    url = 'http://192.168.1.24:11434/api/generate'
+    url = OLLAMA_URL
     
     start_time = time.time()
     async with aiohttp.ClientSession() as session:

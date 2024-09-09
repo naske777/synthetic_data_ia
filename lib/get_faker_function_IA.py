@@ -4,7 +4,7 @@ import requests
 import json
 from faker import Faker
 from config import (
-    MODEL_NAME, GET_FAKER_FUNCTIO_ROLE, GET_FAKER_FUNCTION_QUESTION_TEMPLATE, GET_FAKER_FUNCTION__MODEL_OPTIONS, FAKER_ALLOWED_FUNCTIONS
+    MODEL_NAME, GET_FAKER_FUNCTIO_ROLE, GET_FAKER_FUNCTION_QUESTION_TEMPLATE, GET_FAKER_FUNCTION__MODEL_OPTIONS, FAKER_ALLOWED_FUNCTIONS, OLLAMA_URL
 )
 
 fake = Faker()
@@ -32,7 +32,7 @@ def generate_python_code_for_json(structure):
     }
     
     # URL del endpoint de la API
-    url = 'http://192.168.1.24:11434/api/generate'
+    url = OLLAMA_URL
     response = requests.post(url, headers={}, data=json.dumps(data))
     
     if response.status_code == 200:

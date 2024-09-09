@@ -1,7 +1,8 @@
 #{"name": "animal name","description": "animal description","id": "id","country": "country name"}
 
-# Configuración de generación de elementos
+OLLAMA_URL = 'http://192.168.1.24:11434/api/generate'
 
+# Configuración de generación de elementos
 # Tamaño del lote para la generación de datos. 
 # Modificar este valor afectará cuántos elementos se generan en cada lote.
 BATCH_SIZE = 100
@@ -12,7 +13,7 @@ MAX_NO_PROGRESS_ITERATIONS = 6
 
 # Número de tareas paralelas para la generación de datos.
 # Modificar este valor afectará cuántas tareas se ejecutan en paralelo.
-NUM_TASKS = 3
+NUM_TASKS = 1
 
 # Configuración del modelo y generación de prompts
 
