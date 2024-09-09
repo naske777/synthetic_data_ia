@@ -10,6 +10,10 @@ from config import BATCH_SIZE, MAX_NO_PROGRESS_ITERATIONS, NUM_TASKS  # Importar
 # Función asincrónica para seleccionar y editar claves en los datos JSON
 async def select_and_edit_keys(json_data):
     selected_keys = select_keys(json_data)  # Seleccionar claves del JSON
+    
+    if not selected_keys:
+        return None, None
+    
     edited_values = edit_values(json_data, selected_keys)  # Editar valores de las claves seleccionadas
     related_keys = select_and_define_relationships(selected_keys)  # Definir relaciones entre claves
     return edited_values, related_keys
