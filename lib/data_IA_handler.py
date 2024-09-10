@@ -6,6 +6,22 @@ from googletrans import Translator
 from lib.generate_data_IA import generate_elements
 from lib.input_ui import select_keys, edit_values, select_and_define_relationships
 from config import BATCH_SIZE, MAX_NO_PROGRESS_ITERATIONS, NUM_TASKS  # Importar configuraciones
+from lib.database_handler import  get_data_from_table, insert_data_for_table  # Importar función para leer datos de la base de datos
+import re
+
+# Convertir loss values de un json al nombre  de una tabla
+def convert_values_to_table_name(values):
+    """Convierte los valores de un diccionario a un nombre de tabla."""
+    # Extraer los valores del diccionario
+    valores = list(values.values())
+    
+    # Convertir los valores a una cadena separada por guiones bajos
+    table_name = '_'.join(map(str, valores))
+    
+    # Reemplazar caracteres no permitidos (por ejemplo, espacios y caracteres especiales)
+    table_name = re.sub(r'\W+', '_', table_name)
+    
+    return table_name
 
 # Función asincrónica para seleccionar y editar claves en los datos JSON
 async def select_and_edit_keys(json_data):
@@ -45,14 +61,32 @@ async def generate_elements_for_keys(translated_values, num_elements_dict):
 
     for relationship, values in translated_values.items():
         format_string = json.dumps([{key: values[key] for key in relationship}])
+        table_name = convert_values_to_table_name(values)
         results = []
         unique_elements = set()
         no_progress_iterations = 0
         previous_length = 0
         num_elements = num_elements_dict[relationship]
 
+        # Consultar la base de datos para obtener datos existentes
+        existing_data = get_data_from_table(table_name)
+        print(f"Existing data for {relationship}: {len(existing_data)}")
+        
+        # Analizar la cadena de formato para extraer valores
+        format_string_keys = list(json.loads(format_string)[0].keys())
+    
+        for data in existing_data:
+            if (list(data.keys()) == format_string_keys):
+                results.append(data)
+                unique_elements.add(tuple(data.items()))
+                if len(results) >= num_elements:
+                    break
+
         # Mostrar barra de progreso durante la generación de elementos
         with tqdm(total=num_elements, desc=f"Generating {relationship}") as pbar:
+            print(f"Initial results length: {len(results)}")
+            previous_length = len(results)
+            pbar.update(previous_length)  # Actualizar la barra de progreso con los datos existentes
             while len(results) < num_elements:
                 tasks = [generate_elements(format_string, BATCH_SIZE) for _ in range(NUM_TASKS)]
                 
@@ -87,10 +121,18 @@ async def generate_elements_for_keys(translated_values, num_elements_dict):
         
         all_results[relationship] = results
         print(f"Generated {len(results)} elements for keys '{relationship}'")
+        
+        # Insertar los nuevos datos generados en la base de datos
+        new_data = []
+        for result in results:
+           element_tuple = tuple(result.items())
+           if result not in existing_data:
+              new_data.append(result)
+        
+        print(f"New data to insert for {values}: {new_data}")
+        insert_data_for_table(new_data, table_name)
     
-    return all_results
-
-# Función para guardar los resultados generados en un archivo JSON
+    return all_results# Función para guardar los resultados generados en un archivo JSON
 def save_results(translated_results):
     # Crear la carpeta 'logs' si no existe
     if not os.path.exists('logs'):
