@@ -52,6 +52,15 @@ def edit_values(json_data, selected_keys):
             edited_values[key] = current_value
     return edited_values
 
+# Selecciona y edita claves en los datos JSON.
+async def select_and_edit_keys(json_data):
+    selected_keys = select_keys(json_data)
+    if not selected_keys:
+        return None, None
+    edited_values = edit_values(json_data, selected_keys)
+    related_keys = select_and_define_relationships(selected_keys)
+    return edited_values, related_keys
+
 # Función para seleccionar y definir relaciones entre claves
 def select_and_define_relationships(selected_keys):
     relationships = []

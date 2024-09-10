@@ -1,7 +1,7 @@
 import asyncio
 from lib.get_faker_function_IA import generate_python_code_for_json
-from lib.input_ui import read_json_from_gui
-from lib.data_IA_handler import select_and_edit_keys, translate_values, request_num_elements, generate_elements_for_keys, save_results
+from lib.input_ui import read_json_from_gui, select_and_edit_keys
+from lib.data_IA_handler import translate_values, request_num_elements, generate_elements_for_keys, save_results
 from lib.translate import translate
 from lib.generate_code import filter_and_extract_keys, execute_modified_code, modify_code_txt_with_generated_code, modify_generated_code
 
