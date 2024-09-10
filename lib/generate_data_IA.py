@@ -35,15 +35,13 @@ async def generate_elements(format_string, num_elements):
         "prompt": prompt,
         "system": GENERATE_DATA_ROLE,
         "stream": False,
-        "options": GENERATE_DATA_OPTIONS  # Usar el objeto OPTIONS completo
+        "options": GENERATE_DATA_OPTIONS  # Usa el objeto OPTIONS completo
     }
-    
-    url = OLLAMA_URL
     
     start_time = time.time()
     async with aiohttp.ClientSession() as session:
         elapsed_time_task = asyncio.create_task(print_elapsed_time(start_time))
-        async with session.post(url, json=data) as response:
+        async with session.post(OLLAMA_URL, json=data) as response:
             elapsed_time_task.cancel()
             
             if response.status == 200:
@@ -61,19 +59,19 @@ async def generate_elements(format_string, num_elements):
                 with open('logs/data_response_unformatted.json', 'w', encoding='utf-8') as json_file:
                     json.dump(data, json_file, ensure_ascii=False, indent=4)
                 
+                items = data.split(';')
+                
                 # Extraer datos basados en el nuevo formato
                 if ',' in format_prompt:
                     # Formato de datos relacionados
-                    items = data.split(';')
                     cleaned_data = []
                     for item in items:
-                        if item.strip():
+                        if item.strip(): # Se asegura de que los datos no esten vacios
                             parts = item.split(',')
                             if len(parts) == keysCount:
                                 cleaned_data.append({keys[i]: parts[i].strip() for i in range(keysCount)})
                 else:
                     # Formato de atributo único
-                    items = data.split(';')
                     cleaned_data = [{keys[0]: item.strip()} for item in items if item.strip()]
 
                 # Guardar los datos limpiados en un archivo JSON en la carpeta 'logs'
@@ -83,7 +81,7 @@ async def generate_elements(format_string, num_elements):
                 return cleaned_data
             else:
                 print(f"Request failed with status code: {response.status}")
-                return "Error"
+                return []
 
 if __name__ == "__main__":
     # Ejemplo de uso
