@@ -31,48 +31,52 @@ def generate_python_code_for_json(structure):
         "options": GET_FAKER_FUNCTION__MODEL_OPTIONS
     }
     
-    # URL del endpoint de la API
-    url = OLLAMA_URL
-    response = requests.post(url, headers={}, data=json.dumps(data))
-    
-    if response.status_code == 200:
-        data_response = response.json()
+    while True:
+        try:
+            response = requests.post(OLLAMA_URL, headers={}, data=json.dumps(data))
+            
+            if response.status_code != 200:
+                print(f"Request failed with status code: {response.status_code}")
+                print("Reintentando generar los datos...")
+                continue
+            
+            data_response = response.json()
+            
+            # Obtener el código Python de la respuesta
+            python_code = data_response.get('response')
+            
+            # Extraer el código dentro de las llaves
+            python_code = extract_code_inside_braces(python_code)
+            
+            # Reemplazar 'faker' por 'fake' en el código extraído
+            python_code = python_code.replace('faker', 'fake').replace('Faker', 'fake')
         
-        # Obtener el código Python de la respuesta
-        python_code = data_response.get('response')
+            # Validar que solo se usen funciones permitidas y no se concatenen con otros métodos
+            lines = python_code.split('\n')
+            for i, line in enumerate(lines):
+                matches = re.findall(r'fake\.(\w+)\(\)', line)
+                for match in matches:
+                    if match not in FAKER_ALLOWED_FUNCTIONS:
+                        lines[i] = re.sub(r'fake\.\w+\(\)', 'fake.word()', line)
+                    else:
+                        # Asegurarse de que no haya concatenaciones como .name()
+                        lines[i] = re.sub(rf'fake\.{match}\(\)\.\w+', f'fake.{match}()', line)
+            
+            python_code = '\n'.join(lines)        
+            
+            # Crear la carpeta 'logs' si no existe
+            if not os.path.exists('logs'):
+                os.makedirs('logs')
+            
+            # Guardar el código generado en un archivo dentro de la carpeta 'logs'
+            with open('logs/faker_code.py', 'w', encoding='utf-8') as python_file:
+                python_file.write(python_code)
         
-        # Extraer el código dentro de las llaves
-        python_code = extract_code_inside_braces(python_code)
+            return python_code
         
-        # Reemplazar 'faker' por 'fake' en el código extraído
-        python_code = python_code.replace('faker', 'fake').replace('Faker', 'fake')
-    
-        # Validar que solo se usen funciones permitidas y no se concatenen con otros métodos
-        lines = python_code.split('\n')
-        for i, line in enumerate(lines):
-            matches = re.findall(r'fake\.(\w+)\(\)', line)
-            for match in matches:
-                if match not in FAKER_ALLOWED_FUNCTIONS:
-                    lines[i] = re.sub(r'fake\.\w+\(\)', 'fake.word()', line)
-                else:
-                    # Asegurarse de que no haya concatenaciones como .name()
-                    lines[i] = re.sub(rf'fake\.{match}\(\)\.\w+', f'fake.{match}()', line)
-        
-        python_code = '\n'.join(lines)        
-        
-        # Crear la carpeta 'logs' si no existe
-        if not os.path.exists('logs'):
-            os.makedirs('logs')
-        
-        # Guardar el código generado en un archivo dentro de la carpeta 'logs'
-        with open('logs/faker_code.py', 'w', encoding='utf-8') as python_file:
-            python_file.write(python_code)
-    
-        return python_code
-    
-    else:
-        print(f"Request failed with status code: {response.status_code}")
-        return "Error"
+        except Exception as e:
+            print(f"Error: {e}")
+            print("Reintentando generar los datos...")
 
 if __name__ == "__main__":
     # Estructura de ejemplo para generar el código Python
