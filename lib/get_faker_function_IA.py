@@ -16,6 +16,7 @@ def extract_code_inside_braces(generated_code):
     if match:
         return '{' + match.group(1) + '}'
     else:
+        print("Faker code: ", generated_code)
         raise ValueError("No se encontraron llaves en el código generado")
     
 # Función para generar código Python que crea un objeto JSON con datos realistas
@@ -30,7 +31,7 @@ def generate_python_code_for_json(structure):
         "stream": False,
         "options": GET_FAKER_FUNCTION__MODEL_OPTIONS
     }
-    
+    print("Generando funciones de faker...")
     while True:
         try:
             response = requests.post(OLLAMA_URL, headers={}, data=json.dumps(data))
