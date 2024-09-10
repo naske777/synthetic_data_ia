@@ -3,3 +3,4 @@ output
 venv
 __pycache__
 lib/__pycache__
+db
