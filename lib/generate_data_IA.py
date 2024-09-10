@@ -59,12 +59,12 @@ async def generate_elements(format_string, num_elements):
                 with open('logs/data_response_unformatted.json', 'w', encoding='utf-8') as json_file:
                     json.dump(data, json_file, ensure_ascii=False, indent=4)
                 
+                cleaned_data = []
                 items = data.split(';')
-                
+
                 # Extraer datos basados en el nuevo formato
                 if ',' in format_prompt:
                     # Formato de datos relacionados
-                    cleaned_data = []
                     for item in items:
                         if item.strip(): # Se asegura de que los datos no esten vacios
                             parts = item.split(',')
@@ -72,8 +72,16 @@ async def generate_elements(format_string, num_elements):
                                 cleaned_data.append({keys[i]: parts[i].strip() for i in range(keysCount)})
                 else:
                     # Formato de atributo único
-                    cleaned_data = [{keys[0]: item.strip()} for item in items if item.strip()]
-
+                    for item in items:
+                        if item.strip():
+                            parts = item.split(',')
+                            if len(parts) > 1:
+                                # Si el item tiene múltiples partes separadas por comas, crear un diccionario para cada parte
+                                for part in parts:
+                                    cleaned_data.append({keys[0]: part.strip()})
+                            else:
+                                # Si el item tiene una sola parte, crear un diccionario normal
+                                cleaned_data.append({keys[0]: item.strip()})
                 # Guardar los datos limpiados en un archivo JSON en la carpeta 'logs'
                 with open('logs/data_response_Json.json', 'w', encoding='utf-8') as json_file:
                     json.dump(cleaned_data, json_file, ensure_ascii=False, indent=4)
