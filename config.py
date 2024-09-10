@@ -13,16 +13,12 @@ MAX_NO_PROGRESS_ITERATIONS = 6
 
 # Número de tareas paralelas para la generación de datos.
 # Modificar este valor afectará cuántas tareas se ejecutan en paralelo.
-NUM_TASKS = 1
+NUM_TASKS = 2
 
 # Configuración del modelo y generación de prompts
 
 # Nombre del modelo a utilizar para la generación de datos.
 MODEL_NAME = 'llama3.1'
-
-# Temperatura para la generación de datos.
-# Modificar este valor afectará la aleatoriedad de la generación de datos.
-GENERATE_DATA_TEMPERATURE = 0.5
 
 GENERATE_DATA_ROLE = ("You are a highly specialized data miner. Your job is to generate information strictly from the provided context. "
                       "You are a wizard that returns lists of data in the specified format. "
@@ -38,7 +34,7 @@ GENERATE_DATA_QUESTION_TEMPLATE = ("Generate {num_elements} elements in the foll
 # Opciones para la generación de datos.
 GENERATE_DATA_OPTIONS = {
     "num_predict": 200,  # Número de predicciones a generar.
-    "temperature": GENERATE_DATA_TEMPERATURE,  # Temperatura para la generación de datos.
+    "temperature": 0.5,  # Temperatura para la generación de datos.
     "penalize_newline": True,  # Penalización por nuevas líneas.
 }
 
@@ -77,10 +73,6 @@ GET_FAKER_FUNCTION_QUESTION_TEMPLATE = "Generate Python code to create a JSON ob
 GET_FAKER_FUNCTION__MODEL_OPTIONS = {
     "temperature": 0.2, 
     "num_predict": 50,  
-    "top_p": 0.9, 
-    "top_k": 50,  
-    "repeat_penalty": 1.1,  
-    "mirostat": 2  
 }
 
 # Configuración para input_ui.py
