@@ -64,28 +64,3 @@ def translate(data, src='en', dest='es'):
 
     return data
 
-if __name__ == "__main__":
-    # Datos de ejemplo para traducir
-    data = {
-        "name": [
-            {"name": "Lion"},
-            {"name": "Elephant"},
-            {"name": "Giraffe"},
-            {"name": "Zebra"},
-            {"name": "Kangaroo"},
-            {"name": "Penguin"},
-            {"name": "Chimpanzee"},
-            {"name": "Horse"},
-            {"name": "Penguin"},
-            {"name": "Cow"}
-        ]
-    }
-
-    # Traducir los datos
-    translated_data = translate(data)
-
-    # Guardar los datos traducidos en un archivo JSON
-    with open('translated_data.json', 'w', encoding='utf-8') as file:
-        json.dump(translated_data, file, ensure_ascii=False, indent=4)
-
-    print("Datos traducidos y guardados en 'translated_data.json'")

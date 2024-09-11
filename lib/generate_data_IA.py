@@ -91,8 +91,3 @@ async def generate_elements(format_string, num_elements):
                 print(f"Request failed with status code: {response.status}")
                 return []
 
-if __name__ == "__main__":
-    # Ejemplo de uso
-    format_string = '[{"name": "animal name","description": "animal description"}]'
-    num_elements = 30
-    asyncio.run(generate_elements(format_string, num_elements))

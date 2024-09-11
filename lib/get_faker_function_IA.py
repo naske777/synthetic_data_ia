@@ -79,8 +79,3 @@ def generate_python_code_for_json(structure):
             print(f"Error: {e}")
             print("Reintentando generar los datos...")
 
-if __name__ == "__main__":
-    # Estructura de ejemplo para generar el código Python
-    structure = {"id":"id","country":"country name","animal" : "animal name"}
-    python_code = generate_python_code_for_json(structure)
-    print(python_code)

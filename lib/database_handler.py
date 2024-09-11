@@ -85,23 +85,3 @@ def get_data_from_table(table_name):
             conn.close()
             print("Conexión a la base de datos cerrada.")
     return data
-
-def main():
-    """Main function to insert test data and fetch all data."""
-    # Datos de prueba
-    test_data = [
-        {"name": "Alice", "age": 30, "city": "New York"},
-        {"name": "Bob", "age": 25, "city": "Los Angeles"},
-        {"name": "Charlie", "age": 35, "city": "Chicago"}
-    ]
-    table_name = "test_table"  # Nombre de la tabla
-    
-    # Insertar datos de prueba
-    insert_data_for_table(test_data, table_name)
-    
-    # Fetch and print all data from the table
-    all_data = get_data_from_table(table_name)
-    print(all_data)
-
-if __name__ == "__main__":
-    main()
