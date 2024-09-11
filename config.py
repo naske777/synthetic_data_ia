@@ -2,6 +2,7 @@
 
 OLLAMA_URL = 'http://192.168.1.24:11434/api/generate'
 
+LENGUAGE = 'es' # Si es 'en' se mantendran lo resultados generados por ollama en ingles
 # Configuración de generación de elementos
 # Tamaño del lote para la generación de datos. 
 # Modificar este valor afectará cuántos elementos se generan en cada lote.

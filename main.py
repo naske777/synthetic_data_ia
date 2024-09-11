@@ -1,4 +1,5 @@
 import asyncio
+from config import LENGUAGE
 from lib.get_faker_function_IA import generate_python_code_for_json
 from lib.input_ui import read_json_from_gui, select_and_edit_keys
 from lib.data_IA_handler import translate_values, request_num_elements, generate_elements_for_keys, save_results
@@ -24,15 +25,16 @@ async def main():
 
         # Generar elementos para las claves traducidas
         all_results = await generate_elements_for_keys(related_structure, num_elements_dict)
+        
+        if(LENGUAGE != 'en'):
+            # Traducir los resultados generados del inglés al español
+            all_results = translate(all_results, src='en', dest=LENGUAGE)
 
-        # Traducir los resultados generados del inglés al español
-        translated_results = translate(all_results, src='en', dest='es')
-
-        # Guardar los resultados traducidos en un archivo
-        save_results(translated_results)
+        # Guardar los resultados  en un archivo
+        save_results(all_results)
   
         # Obtener las variables a añadir y la estructura de faker
-        variables_to_add, faker_structure = get_variables_and_faker_structure(structure, translated_results)
+        variables_to_add, faker_structure = get_variables_and_faker_structure(structure, all_results)
   
     # Generar código Python a partir del JSON modificado
     faker_function = generate_python_code_for_json(faker_structure)
