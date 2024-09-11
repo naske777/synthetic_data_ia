@@ -72,7 +72,6 @@ GET_FAKER_FUNCTION_QUESTION_TEMPLATE = "Generate Python code to create a JSON ob
 # Opciones para la generación de código Python utilizando 'faker'.
 GET_FAKER_FUNCTION__MODEL_OPTIONS = {
     "temperature": 0.2, 
-    "num_predict": 50,  
 }
 
 # Configuración para input_ui.py
