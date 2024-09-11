@@ -2,14 +2,13 @@ import os
 import subprocess
 import json
 import copy
-from lib.get_faker_function_IA import generate_python_code_for_json
 
 # Función para leer datos generados desde un archivo JSON
 def read_generated_data(file_path='../generated_data.json'):
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
 
-# Función para comparar y eliminar claves de la estructura original
+# Obtener las variables a añadir y la estructura de faker
 def get_variables_and_faker_structure(structure, translated_results):
     keys_to_remove = {}
     variables_to_add = {}
