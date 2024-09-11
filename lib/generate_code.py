@@ -10,7 +10,7 @@ def read_generated_data(file_path='../generated_data.json'):
         return json.load(file)
 
 # Función para comparar y eliminar claves de la estructura original
-def filter_and_extract_keys(structure, translated_results):
+def get_variables_and_faker_structure(structure, translated_results):
     keys_to_remove = {}
     variables_to_add = {}
     
