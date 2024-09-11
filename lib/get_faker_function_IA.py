@@ -26,8 +26,8 @@ def generate_python_code_for_json(structure):
     prompt = f"Question: {question}"
     data = {
         "model": MODEL_NAME,
-        "prompt": prompt + GET_FAKER_FUNCTIO_ROLE,
-        # "system": GET_FAKER_FUNCTIO_ROLE,
+        "prompt": prompt ,
+        "system": GET_FAKER_FUNCTIO_ROLE,
         "stream": False,
         "options": GET_FAKER_FUNCTION__MODEL_OPTIONS
     }
