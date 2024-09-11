@@ -31,7 +31,7 @@ async def main():
         # Guardar los resultados traducidos en un archivo
         save_results(translated_results)
   
-        # Comparar y eliminar claves del JSON original con los resultados traducidos
+        # Obtener las variables a añadir y la estructura de faker
         variables_to_add, faker_structure = get_variables_and_faker_structure(structure, translated_results)
   
     # Generar código Python a partir del JSON modificado
